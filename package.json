@@ -1,6 +1,6 @@
 {
   "name": "pm2-windows-boot",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
