@@ -1,5 +1,5 @@
 {
-  "name": "pm2-windows-startup",
+  "name": "pm2-windows-boot",
   "version": "1.0.2",
   "description": "",
   "main": "index.js",
