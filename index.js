@@ -36,3 +36,14 @@ function enablePm2Startup() {
   });
 }
 
+function removePm2Startup() {
+  startOnBoot.disableAutoStart(applicationName, function (error) {
+    if (error) {
+      console.log('Error while trying to remove PM2 startup registry entry: ' + error);
+    } else {
+      console.log('Successfully removed PM2 startup registry entry.');
+    }
+  });
+}
+
+
