@@ -26,3 +26,13 @@ switch (argv[0]) {
     console.log('Invalid command. Please provide either "install" or "uninstall" as a command.');
 }
 
+function enablePm2Startup() {
+  startOnBoot.enableAutoStart(applicationName, applicationCommand, function (error) {
+    if (error) {
+      console.log('Error while trying to add PM2 startup registry entry: ' + error);
+    } else {
+      console.log('Successfully added PM2 startup registry entry.');
+    }
+  });
+}
+
