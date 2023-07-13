@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const startOnBoot = require("start-on-windows-boot");
+const startOnBoot = require("start-commander");
 const yargs = require("yargs");
 
 const argv = yargs
