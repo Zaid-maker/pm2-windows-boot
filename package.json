@@ -8,8 +8,8 @@
     "dev": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "DevMIrza",
+  "license": "MIT",
   "dependencies": {
     "start-commander": "^1.0.1",
     "yargs": "^3.32.0"
