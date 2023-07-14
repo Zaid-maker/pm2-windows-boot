@@ -10,6 +10,9 @@
   "keywords": [],
   "author": "DevMIrza",
   "license": "MIT",
+  "bin": {
+    "pm2-startup": "index.js"
+  },
   "dependencies": {
     "start-commander": "^1.0.1",
     "yargs": "^3.32.0"
