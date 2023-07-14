@@ -10,7 +10,9 @@ const argv = yargs
     "uninstall",
     "Removes the registry entry which resurrects PM2 on startup."
   )
-  .demandCommand(1).argv;
+  .demand(1)
+  .argv
+  ._;
 
 var applicationName = "PM2";
 var applicationCommand = `wscript.exe "${__dirname}\\invisible.vbs" "${__dirname}\\pm2_resurrect.cmd"`;
