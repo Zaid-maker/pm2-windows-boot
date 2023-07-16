@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 
-const startOnBoot = require("start-commander");
-const yargs = require("yargs");
-
-const argv = yargs
+var startOnBoot = require("start-commander");
+var argv = require("yargs")
   .usage("Usage: pm2-startup <command>")
   .command("install", "Adds a registry entry which resurrects PM2 on startup.")
   .command(
     "uninstall",
     "Removes the registry entry which resurrects PM2 on startup."
   )
-  .demand(1)
-  .argv
-  ._;
+  .demand(1).argv._;
 
 var applicationName = "PM2";
-var applicationCommand = `wscript.exe "${__dirname}\\invisible.vbs" "${__dirname}\\pm2_resurrect.cmd"`;
+var applicationCommand =
+  'wscript.exe "' +
+  __dirname +
+  '\\invisible.vbs" "' +
+  __dirname +
+  '\\pm2_resurrect.cmd"';
 
 switch (argv[0]) {
   case "install":
@@ -25,11 +26,6 @@ switch (argv[0]) {
   case "uninstall":
     removePm2Startup();
     break;
-
-  default:
-    console.log(
-      'Invalid command. Please provide either "install" or "uninstall" as a command.'
-    );
 }
 
 function enablePm2Startup() {
