@@ -13,9 +13,9 @@ npm i -g pm2-windows-boot
 ## Usage
 
 ```
-pm2-windows enable
+pm2-startup enable
 ```
 
 ```
-pm2-windows disable
+pm2-startup disable
 ```
