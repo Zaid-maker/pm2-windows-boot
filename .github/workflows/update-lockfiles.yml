@@ -25,7 +25,7 @@ jobs:
       - name: Check for changes
         id: check-changes
         run: |
-          git diff --exit-code || echo "Changes detected" && exit 1
+          git diff --exit-code || echo "Changes detected"
         continue-on-error: true
 
       - name: Commit changes
