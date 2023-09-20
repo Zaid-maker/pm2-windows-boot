@@ -22,17 +22,10 @@ jobs:
         run: |
           npm update
 
-      - name: Check for changes
-        id: check-changes
-        run: |
-          git diff --exit-code || echo "Changes detected"
-        continue-on-error: true
-
-      - name: Commit changes
-        if: steps.check-changes.outcome == 'success'
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add .
-          git commit -m "Update lock files [skip ci]" # Use a meaningful commit message
-          git push
+      - name: Commit new data
+        uses: stefanzweifel/git-auto-commit-action@v4.15.4
+        with:
+          commit_message: ":arrow_up: Update `package-lock.json` to latest"
+          commit_user_name: Zaid-maker
+          commit_user_email: pzhafeez@gmail.com
+          commit_author: Zaid-maker <pzhafeez@gmail.com>
