@@ -20,6 +20,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1",
-    "semantic-release": "^22.0.1"
+    "semantic-release": "^17.4.7"
   }
 }
