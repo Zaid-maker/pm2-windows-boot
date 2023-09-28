@@ -1,8 +1,7 @@
 name: Publish Package
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,6 +23,7 @@ jobs:
         run: npm install
 
       - name: Publish package on NPM 📦
-        run: npm publish
+        run: npx semantic-release
         env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
