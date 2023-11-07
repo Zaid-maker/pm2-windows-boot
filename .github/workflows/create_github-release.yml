@@ -1,6 +1,7 @@
 name: Create GitHub release
 
 on:
+  workflow_dispatch:
   repository_dispatch:
     types: [create-github-release]
 
