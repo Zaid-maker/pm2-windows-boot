@@ -3,8 +3,8 @@ name: Create GitHub release
 on:
   workflow_dispatch:
   push:
-    tags:
-      - '*'
+    branches:
+      - 'main'
 
 jobs:
   Create_GitHub_release:
