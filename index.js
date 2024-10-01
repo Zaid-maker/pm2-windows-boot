@@ -1,20 +1,32 @@
 #!/usr/bin/env node
 
 const startOnBoot = require("start-commander");
+const fs = require("fs");
 const argv = require("yargs")
-  .usage("Usage: pm2-startup <command>")
+  .usage("Usage: pm2-startup <command> [options]")
   .command("install", "Adds a registry entry which resurrects PM2 on startup.")
   .command(
     "uninstall",
     "Removes the registry entry which resurrects PM2 on startup."
   )
+  .command("status", "Checks if PM2 is set to start on boot.")
+  .command("restart", "Reinstalls the startup entry for PM2.")
+  .command(
+    "force-install",
+    "Removes and then installs the startup entry for PM2."
+  )
+  .option("verbose", {
+    alias: "v",
+    description: "Enable verbose logging",
+    type: "boolean",
+  })
   .demand(1).argv._;
 
 const winston = require("winston");
 
-// Setup logger with timestamp
+// Setup logger with optional verbose mode
 const logger = winston.createLogger({
-  level: "info",
+  level: argv.verbose ? "debug" : "info",
   format: winston.format.combine(
     winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), // Custom timestamp format
     winston.format.json()
@@ -65,6 +77,7 @@ switch (argv[0]) {
     logger.error("Invalid command: " + argv[0]);
 }
 
+// Install PM2 startup
 function enablePm2Startup() {
   try {
     startOnBoot.enableAutoStart(
@@ -83,6 +96,7 @@ function enablePm2Startup() {
   }
 }
 
+// Uninstall PM2 startup
 function removePm2Startup() {
   try {
     startOnBoot.disableAutoStart(applicationName, (error) => {
@@ -97,8 +111,31 @@ function removePm2Startup() {
   }
 }
 
-function checkPm2StartupStatus() {}
+// Check if PM2 is set to start on boot
+function checkPm2StartupStatus() {
+  try {
+    startOnBoot.isAutoStartEnabled(applicationName, (error, enabled) => {
+      if (error) {
+        logger.error("Failed to check PM2 startup status", error);
+      } else if (enabled) {
+        logger.info("PM2 is set to start on boot.");
+      } else {
+        logger.info("PM2 is not set to start on boot.");
+      }
+    });
+  } catch (err) {
+    logger.error("Exception in checkPm2StartupStatus", err);
+  }
+}
 
-function restartPm2Startup() {}
+// Restart PM2 startup by uninstalling and reinstalling
+function restartPm2Startup() {
+  removePm2Startup();
+  enablePm2Startup();
+}
 
-function forceInstallPm2Startup() {}
+// Force install PM2 startup by removing any existing entry first
+function forceInstallPm2Startup() {
+  removePm2Startup();
+  enablePm2Startup();
+}
