@@ -49,6 +49,18 @@ switch (argv[0]) {
     removePm2Startup();
     break;
 
+  case "status":
+    checkPm2StartupStatus();
+    break;
+
+  case "restart":
+    restartPm2Startup();
+    break;
+
+  case "force-install":
+    forceInstallPm2Startup();
+    break;
+
   default:
     logger.error("Invalid command: " + argv[0]);
 }
@@ -84,3 +96,9 @@ function removePm2Startup() {
     logger.error("Exception in removePm2Startup", err);
   }
 }
+
+function checkPm2StartupStatus() {}
+
+function restartPm2Startup() {}
+
+function forceInstallPm2Startup() {}
