@@ -10,10 +10,22 @@ const argv = require("yargs")
   )
   .demand(1).argv._;
 
-const winston = require('winston')
+const winston = require("winston");
 
-var applicationName = "PM2";
-var applicationCommand =
+const logger = winston.createLogger({
+  level: "info",
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.File({ filename: "pm2-windows-boot.log" }),
+    new winston.transports.Console({ format: winston.format.simple() }),
+  ],
+});
+
+const applicationName = "PM2";
+const applicationCommand =
   'wscript.exe "' +
   __dirname +
   '\\invisible.vbs" "' +
@@ -28,32 +40,39 @@ switch (argv[0]) {
   case "uninstall":
     removePm2Startup();
     break;
+
+  default:
+    logger.error("Invalid command: " + argv[0]);
 }
 
 function enablePm2Startup() {
-  startOnBoot.enableAutoStart(
-    applicationName,
-    applicationCommand,
-    function (error) {
-      if (error) {
-        console.log(
-          "Error while trying to add PM2 startup registry entry: " + error
-        );
-      } else {
-        console.log("Successfully added PM2 startup registry entry.");
+  try {
+    startOnBoot.enableAutoStart(
+      applicationName,
+      applicationCommand,
+      (error) => {
+        if (error) {
+          logger.error("Failed to add PM2 startup registry entry", error);
+        } else {
+          logger.info("Successfully added PM2 startup registry entry.");
+        }
       }
-    }
-  );
+    );
+  } catch (err) {
+    logger.error("Exception in enablePm2Startup", err);
+  }
 }
 
 function removePm2Startup() {
-  startOnBoot.disableAutoStart(applicationName, function (error) {
-    if (error) {
-      console.log(
-        "Error while trying to remove PM2 startup registry entry: " + error
-      );
-    } else {
-      console.log("Successfully removed PM2 startup registry entry.");
-    }
-  });
+  try {
+    startOnBoot.disableAutoStart(applicationName, (error) => {
+      if (error) {
+        logger.error("Failed to remove PM2 startup registry entry", error);
+      } else {
+        logger.info("Successfully removed PM2 startup registry entry.");
+      }
+    });
+  } catch (err) {
+    logger.error("Exception in removePm2Startup", err);
+  }
 }
