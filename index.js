@@ -12,15 +12,23 @@ const argv = require("yargs")
 
 const winston = require("winston");
 
+// Setup logger with timestamp
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.combine(
-    winston.format.timestamp(),
+    winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), // Custom timestamp format
     winston.format.json()
   ),
   transports: [
     new winston.transports.File({ filename: "pm2-windows-boot.log" }),
-    new winston.transports.Console({ format: winston.format.simple() }),
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.printf(({ timestamp, level, message }) => {
+          return `[${timestamp}] ${level}: ${message}`;
+        })
+      ),
+    }),
   ],
 });
 
@@ -28,9 +36,9 @@ const applicationName = "PM2";
 const applicationCommand =
   'wscript.exe "' +
   __dirname +
-  '\\invisible.vbs" "' +
+  '\\\\invisible.vbs" "' +
   __dirname +
-  '\\pm2_resurrect.cmd"';
+  '\\\\pm2_resurrect.cmd"';
 
 switch (argv[0]) {
   case "install":
