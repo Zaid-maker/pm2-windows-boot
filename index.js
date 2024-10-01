@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
-const startOnBoot = require("start-commander");
-const fs = require("fs");
-const argv = require("yargs")
+import startOnBoot from "start-commander";
+import fs from "fs";
+import yargs from "yargs";
+
+const argv = yargs
   .usage("Usage: pm2-startup <command> [options]")
   .command("install", "Adds a registry entry which resurrects PM2 on startup.")
   .command(
@@ -139,3 +141,11 @@ function forceInstallPm2Startup() {
   removePm2Startup();
   enablePm2Startup();
 }
+
+export {
+  enablePm2Startup,
+  removePm2Startup,
+  checkPm2StartupStatus,
+  restartPm2Startup,
+  forceInstallPm2Startup,
+};
