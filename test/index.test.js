@@ -1,7 +1,6 @@
-const chai = require("chai");
-const sinon = require("sinon");
-const expect = chai.expect;
-const startOnBoot = require("start-commander");
+import { expect } from "chai";
+import sinon from "sinon";
+import startOnBoot from "start-commander";
 
 // Mocked logger to capture logging
 const logger = {
@@ -9,8 +8,14 @@ const logger = {
   error: sinon.spy(),
 };
 
-// Mock the actual script being tested
-const script = require("../index"); // Adjust path as necessary
+// Import the script being tested
+import {
+  enablePm2Startup,
+  removePm2Startup,
+  checkPm2StartupStatus,
+  restartPm2Startup,
+  forceInstallPm2Startup,
+} from "../index.js";
 
 describe("PM2 Windows Boot Script", () => {
   let enableStub, disableStub, statusStub;
@@ -33,7 +38,7 @@ describe("PM2 Windows Boot Script", () => {
   it("should install PM2 startup successfully", (done) => {
     enableStub.yields(null); // Simulate successful install
 
-    script.enablePm2Startup();
+    enablePm2Startup();
 
     expect(enableStub.calledOnce).to.be.true;
     expect(
@@ -45,7 +50,7 @@ describe("PM2 Windows Boot Script", () => {
   it("should fail to install PM2 startup", (done) => {
     enableStub.yields(new Error("Failed to install"));
 
-    script.enablePm2Startup();
+    enablePm2Startup();
 
     expect(enableStub.calledOnce).to.be.true;
     expect(
@@ -57,7 +62,7 @@ describe("PM2 Windows Boot Script", () => {
   it("should uninstall PM2 startup successfully", (done) => {
     disableStub.yields(null); // Simulate successful uninstall
 
-    script.removePm2Startup();
+    removePm2Startup();
 
     expect(disableStub.calledOnce).to.be.true;
     expect(
@@ -69,7 +74,7 @@ describe("PM2 Windows Boot Script", () => {
   it("should fail to uninstall PM2 startup", (done) => {
     disableStub.yields(new Error("Failed to uninstall"));
 
-    script.removePm2Startup();
+    removePm2Startup();
 
     expect(disableStub.calledOnce).to.be.true;
     expect(
@@ -83,7 +88,7 @@ describe("PM2 Windows Boot Script", () => {
   it("should check PM2 startup status - enabled", (done) => {
     statusStub.yields(null, true); // Simulate PM2 enabled
 
-    script.checkPm2StartupStatus();
+    checkPm2StartupStatus();
 
     expect(statusStub.calledOnce).to.be.true;
     expect(logger.info.calledWith("PM2 is set to start on boot.")).to.be.true;
@@ -93,7 +98,7 @@ describe("PM2 Windows Boot Script", () => {
   it("should check PM2 startup status - not enabled", (done) => {
     statusStub.yields(null, false); // Simulate PM2 disabled
 
-    script.checkPm2StartupStatus();
+    checkPm2StartupStatus();
 
     expect(statusStub.calledOnce).to.be.true;
     expect(logger.info.calledWith("PM2 is not set to start on boot.")).to.be
@@ -105,7 +110,7 @@ describe("PM2 Windows Boot Script", () => {
     disableStub.yields(null);
     enableStub.yields(null);
 
-    script.restartPm2Startup();
+    restartPm2Startup();
 
     expect(disableStub.calledOnce).to.be.true;
     expect(enableStub.calledOnce).to.be.true;
@@ -119,7 +124,7 @@ describe("PM2 Windows Boot Script", () => {
     disableStub.yields(null);
     enableStub.yields(null);
 
-    script.forceInstallPm2Startup();
+    forceInstallPm2Startup();
 
     expect(disableStub.calledOnce).to.be.true;
     expect(enableStub.calledOnce).to.be.true;
