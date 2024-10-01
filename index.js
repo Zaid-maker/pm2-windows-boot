@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-var startOnBoot = require("start-commander");
-var argv = require("yargs")
+const startOnBoot = require("start-commander");
+const argv = require("yargs")
   .usage("Usage: pm2-startup <command>")
   .command("install", "Adds a registry entry which resurrects PM2 on startup.")
   .command(
@@ -9,6 +9,8 @@ var argv = require("yargs")
     "Removes the registry entry which resurrects PM2 on startup."
   )
   .demand(1).argv._;
+
+const winston = require('winston')
 
 var applicationName = "PM2";
 var applicationCommand =
